@@ -12,7 +12,7 @@ This is an ecommerce website built with Django and Python as Backend.
 - Admin adds the category and products
 - Browses all the products and categories
 - User can signup and login
-- User can add review for the product
 - Add products in cart
 - User can checkout product
+- User can request a refund
 
