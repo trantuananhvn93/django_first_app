@@ -8,14 +8,17 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
-
-from .models import Item, Order, OrderItem, Address, Payment, Coupon, Refund
+from django.contrib.auth.decorators import login_required
+from .models import Item, Order, OrderItem, Address, Payment, Coupon, Refund, UserProfile
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 
 import random
 import string
 import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def create_ref_code():
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
 
 class HomeView(ListView):
     model = Item
@@ -38,10 +41,7 @@ class ItemDetailView(DetailView):
     model = Item
     template_name = "polls/product.html"
 
-class CartView(generic.DetailView):
-    model = OrderItem
-    template_name = 'polls/cart.html'
-
+@login_required
 def add_to_cart(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     order_item, created = OrderItem.objects.get_or_create(item=item, user=request.user, ordered=False)
@@ -68,6 +68,7 @@ def add_to_cart(request, item_id):
     return redirect('polls:order-summary')
     # return HttpResponseRedirect(reverse('polls:cart', args=(order_item.id,)))
 
+@login_required
 def remove_from_cart(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
@@ -86,7 +87,7 @@ def remove_from_cart(request, item_id):
         messages.info(request, "Your cart is empty")
     return redirect('polls:order-summary')
 
-
+@login_required
 def remove_single_item_from_cart(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
@@ -151,7 +152,7 @@ class CheckoutView(View):
             return render(self.request, "polls/checkout.html", context)
         except ObjectDoesNotExist:
             messages.info(self.request, "You do not have an active order")
-            return redirect("polls/")
+            return redirect("/polls/")
 
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
@@ -350,14 +351,11 @@ class PaymentView(View):
 
             if save:
                 if userprofile.stripe_customer_id != '' and userprofile.stripe_customer_id is not None:
-                    customer = stripe.Customer.retrieve(
-                        userprofile.stripe_customer_id)
+                    customer = stripe.Customer.retrieve(userprofile.stripe_customer_id)
                     customer.sources.create(source=token)
 
                 else:
-                    customer = stripe.Customer.create(
-                        email=self.request.user.email,
-                    )
+                    customer = stripe.Customer.create(email=self.request.user.email,)                    
                     customer.sources.create(source=token)
                     userprofile.stripe_customer_id = customer['id']
                     userprofile.one_click_purchasing = True
@@ -447,6 +445,10 @@ class PaymentView(View):
 
         messages.warning(self.request, "Invalid data received")
         return redirect("/payment/stripe/")
+
+
+
+
 
 class RequestRefundView(View):
     def get(self, *args, **kwargs):

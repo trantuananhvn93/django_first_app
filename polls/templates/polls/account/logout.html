@@ -7,33 +7,32 @@
 {% block content %}
 
 <main>
-  <div class="container">
-    <section class="mb-4">
-      <div class="row wow fadeIn">
-        <div class='col-6 offset-3'>
+  <div class="row">
+    <div class="col-md-4 offset-4">
 
-            <h1>{% trans "Sign Out" %}</h1>
+      <!-- Default form subscription -->
+      <div class="text-center border border-light p-5" action="#!">
 
-            <p>{% trans 'Are you sure you want to sign out?' %}</p>
-            
-            <form method="post" action="{% url 'account_logout' %}">
-              {% csrf_token %}
-              {% if redirect_field_value %}
-              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-              {% endif %}
-              <button class="btn btn-danger" type="submit">{% trans 'Sign Out' %}</button>
-            </form>
+        <p class="h4 mb-4">{% trans "Sign Out" %}</p>
 
+        <p>{% trans 'Are you sure you want to sign out?' %}</p>
 
+        <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+          <button class="btn btn-danger" type="submit">{% trans 'Sign Out' %}</button>
+        </form>
 
-          </div>
-          </div>
-          </section>
-          </div>
-          </main>
+      </div>
+      <!-- Default form subscription -->
 
 
+    </div>
+  </div>
 
+</main>
 
 
 

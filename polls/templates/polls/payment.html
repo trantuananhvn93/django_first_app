@@ -155,7 +155,7 @@ button:hover {
 {% block extra_scripts %}
 
 <script nonce="">  // Create a Stripe client.
-  var stripe = Stripe('');
+  var stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
   // Create an instance of Elements.
   var elements = stripe.elements();
   // Custom styling can be passed to options when creating an Element.
@@ -210,7 +210,7 @@ button:hover {
     var hiddenInput = document.createElement('input');
     hiddenInput.setAttribute('type', 'hidden');
     hiddenInput.setAttribute('name', 'stripeToken');
-    hiddenInput.setAttribute('value', token.id);
+    hiddenInput.setAttribute('value', token.id); 
     form.appendChild(hiddenInput);
     // Submit the form
     form.submit();

@@ -33,7 +33,7 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     description = models.TextField()
     quantity = models.IntegerField(default=1)
-
+    img_url = models.URLField(blank=True, null=True)
     def __str__(self):
         return self.title
 
@@ -68,6 +68,7 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     order_date = models.DateTimeField(auto_now_add=True)
     ordered = models.BooleanField(default=False)
+    ref_code = models.CharField(max_length=20, blank=True, null=True)
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
     billing_address = models.ForeignKey(
@@ -171,6 +172,7 @@ class Refund(models.Model):
 
     def __str__(self):
         return f"{self.pk}"
+        
 post_save.connect(userprofile_receiver, sender=settings.AUTH_USER_MODEL)
 
 

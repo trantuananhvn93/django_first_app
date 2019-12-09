@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <td colspan="5">
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+            <a class='btn btn-primary float-right' href='/polls/'>Continue shopping</a>
             </td>
         </tr>
         {% endfor %}
@@ -63,8 +63,8 @@
         </tr>
         <tr>
             <td colspan="5">
-            <a class='btn btn-warning float-right ml-2' href=''>Proceed to checkout</a>
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+            <a href="{% url 'polls:checkout' %}" class='btn btn-warning float-right ml-2' href=''>Proceed to checkout</a>
+            <a href="/polls/" class='btn btn-dark-green float-right' href='/'>Continue shopping</a>
             </td>
         </tr>
         {% endif %}
