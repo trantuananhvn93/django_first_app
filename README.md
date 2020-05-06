@@ -16,3 +16,20 @@ This is an ecommerce website built with Django and Python as Backend.
 - User can checkout product
 - User can request a refund
 
+## Screenshot
+
+HomePage:
+
+![home](img/home.png)
+
+Product Page:
+
+![product](img/product.png)
+
+Order form:
+
+![order](img/order.png)
+
+Check out form:
+
+![checkout](img/checkout.png)
